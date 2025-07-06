@@ -19,6 +19,7 @@ namespace Player
         private Rigidbody _rb;
         private Vector2 _moveInput;
 
+        // Variable initializations
         private void Awake()
         {
             _rb = gameObject.GetComponent<Rigidbody>();
@@ -46,7 +47,8 @@ namespace Player
                 ApplyGravity();
             }
         }
-
+        
+        // Get movement direction from input callback
         public void OnMove(InputAction.CallbackContext context)
         {
             _moveInput = context.ReadValue<Vector2>();
@@ -58,10 +60,11 @@ namespace Player
             _currentState = state;
             _currentState.Enter();
         }
-
+        
+        // Applies forces to move player
         private void HandleMovement()
         {
-            // Get move direction
+            // Get movement direction
             Vector3 move = transform.right * _moveInput.x + transform.forward * _moveInput.y;
             // Apply forces
             _rb.MovePosition(_rb.position + move * (moveSpeed * Time.fixedDeltaTime));
