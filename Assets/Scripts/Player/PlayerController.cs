@@ -1,73 +1,76 @@
-using Unity.VisualScripting;
+using Player.States;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(PlayerInput))]
-public class PlayerController : MonoBehaviour
+namespace Player
 {
-    [Header("Movement Settings")]
-    [SerializeField] private float gravity = 9.8f;
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float jumpForce = 5f;
-
-    public PlayerInput InputManager { get; private set; }
-
-    private PlayerState currentState;
-    private Rigidbody rb;
-    private Vector2 moveInput;
-
-    private void Awake()
+    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(PlayerInput))]
+    public class PlayerController : MonoBehaviour
     {
-        rb = gameObject.GetComponent<Rigidbody>();
-        InputManager = gameObject.GetComponent<PlayerInput>();
-    }
+        [Header("Movement Settings")]
+        [SerializeField] private float gravity = 9.8f;
+        [SerializeField] private float moveSpeed = 5f;
+        [SerializeField] private float jumpForce = 5f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private void Start()
-    {
-        ChangeState(new IdleState(this));   
-    }
+        public PlayerInput InputManager { get; private set; }
 
-    // Update is called once per frame
-    private void Update()
-    {
-        currentState?.Update();
-    }
+        private PlayerState _currentState;
+        private Rigidbody _rb;
+        private Vector2 _moveInput;
 
-    // FixedUpdate is called at a fixed interval and is used for physics calculations
-    private void FixedUpdate()
-    {
-        if (currentState is MoveState)
+        private void Awake()
         {
-            HandleMovement();
-            ApplyGravity();
+            _rb = gameObject.GetComponent<Rigidbody>();
+            InputManager = gameObject.GetComponent<PlayerInput>();
         }
-    }
 
-    public void OnMove(InputAction.CallbackContext context)
-    {
-        moveInput = context.ReadValue<Vector2>();
-    }
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        private void Start()
+        {
+            ChangeState(new IdleState(this));   
+        }
 
-    public void ChangeState(PlayerState state)
-    {
-        currentState?.Exit();
-        currentState = state;
-        currentState.Enter();
-    }
+        // Update is called once per frame
+        private void Update()
+        {
+            _currentState?.Update();
+        }
 
-    private void HandleMovement()
-    {
-        // Get move direction
-        Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
-        // Apply forces
-        rb.MovePosition(rb.position + move * moveSpeed * Time.fixedDeltaTime);
-    }
+        // FixedUpdate is called at a fixed interval and is used for physics calculations
+        private void FixedUpdate()
+        {
+            if (_currentState is MoveState)
+            {
+                HandleMovement();
+                ApplyGravity();
+            }
+        }
 
-    private void ApplyGravity()
-    {
-        // Apply gravity to the player
-        rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
+        public void OnMove(InputAction.CallbackContext context)
+        {
+            _moveInput = context.ReadValue<Vector2>();
+        }
+
+        public void ChangeState(PlayerState state)
+        {
+            _currentState?.Exit();
+            _currentState = state;
+            _currentState.Enter();
+        }
+
+        private void HandleMovement()
+        {
+            // Get move direction
+            Vector3 move = transform.right * _moveInput.x + transform.forward * _moveInput.y;
+            // Apply forces
+            _rb.MovePosition(_rb.position + move * (moveSpeed * Time.fixedDeltaTime));
+        }
+
+        private void ApplyGravity()
+        {
+            // Apply gravity to the player
+            _rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
+        }
     }
 }

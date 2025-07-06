@@ -1,13 +1,12 @@
-public abstract class PlayerState
+namespace Player.States
 {
-    protected PlayerController player;
-
-    public PlayerState(PlayerController player)
+    public abstract class PlayerState : State
     {
-        this.player = player;
-    }
+        protected readonly PlayerController Player;
 
-    public virtual void Enter() { }
-    public virtual void Exit() { }
-    public virtual void Update() { }
+        protected PlayerState(PlayerController player)
+        {
+            this.Player = player;
+        }
+    }
 }

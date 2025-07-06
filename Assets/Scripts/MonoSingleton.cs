@@ -21,7 +21,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                     // If not found, create a new GameObject and add the singleton component
                     GameObject singletonObject = new GameObject();
                     _instance = singletonObject.AddComponent<T>();
-                    singletonObject.name = typeof(T).ToString() + " (Singleton)";
+                    singletonObject.name = typeof(T) + " (Singleton)";
                     DontDestroyOnLoad(singletonObject); // Persist across scenes
                 }
             }

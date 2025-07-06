@@ -1,16 +1,19 @@
 using UnityEngine.InputSystem;
 
-public class IdleState : PlayerState
+namespace Player.States
 {
-    public IdleState(PlayerController player) : base(player) { }
-
-    public override void Update()
+    public class IdleState : PlayerState
     {
-        InputAction moveAction = player.InputManager.actions["Move"];
+        public IdleState(PlayerController player) : base(player) { }
 
-        if (moveAction.IsPressed())
+        public override void Update()
         {
-            player.ChangeState(new MoveState(player));
+            InputAction moveAction = Player.InputManager.actions["Move"];
+
+            if (moveAction.IsPressed())
+            {
+                Player.ChangeState(new MoveState(Player));
+            }
         }
     }
 }
