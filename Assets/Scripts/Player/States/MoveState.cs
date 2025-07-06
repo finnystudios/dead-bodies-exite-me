@@ -12,7 +12,7 @@ namespace Player.States
 
             if (!moveAction.IsPressed())
             {
-                Player.ChangeState(new MoveState(Player));
+                Player.StateMachine.SetState(new IdleState(Player));
             }
         }
     }

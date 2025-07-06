@@ -1,4 +1,5 @@
 using Player.States;
+using Core.StateMachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,8 +15,8 @@ namespace Player
         [SerializeField] private float jumpForce = 5f;
 
         public PlayerInput InputManager { get; private set; }
-
-        private PlayerState _currentState;
+        public readonly StateMachine<PlayerController> StateMachine = new();
+        
         private Rigidbody _rb;
         private Vector2 _moveInput;
 
@@ -29,19 +30,19 @@ namespace Player
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         private void Start()
         {
-            ChangeState(new IdleState(this));   
+            StateMachine.SetState(new IdleState(this));
         }
 
         // Update is called once per frame
         private void Update()
         {
-            _currentState?.Update();
+            StateMachine.CurrentState?.Update();
         }
 
         // FixedUpdate is called at a fixed interval and is used for physics calculations
         private void FixedUpdate()
         {
-            if (_currentState is MoveState)
+            if (StateMachine.CurrentState is MoveState)
             {
                 HandleMovement();
                 ApplyGravity();
@@ -52,13 +53,6 @@ namespace Player
         public void OnMove(InputAction.CallbackContext context)
         {
             _moveInput = context.ReadValue<Vector2>();
-        }
-
-        public void ChangeState(PlayerState state)
-        {
-            _currentState?.Exit();
-            _currentState = state;
-            _currentState.Enter();
         }
         
         // Applies forces to move player

@@ -4,7 +4,8 @@ namespace Player.States
 {
     public class IdleState : PlayerState
     {
-        public IdleState(PlayerController player) : base(player) { }
+        // Run superclass constructor
+        public IdleState(PlayerController context) : base(context) { }
 
         public override void Update()
         {
@@ -12,7 +13,7 @@ namespace Player.States
 
             if (moveAction.IsPressed())
             {
-                Player.ChangeState(new MoveState(Player));
+                Player.StateMachine.SetState(new MoveState(Player));
             }
         }
     }

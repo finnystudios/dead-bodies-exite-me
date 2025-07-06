@@ -3,6 +3,7 @@ using UnityEngine;
 // Generic MonoBehaviour singleton base class
 namespace Core
 {
+    // Singleton and T both inherit MonoBehaviour
     public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         // The static instance of the singleton

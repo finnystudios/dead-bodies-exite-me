@@ -1,14 +1,12 @@
-using Core;
+using Core.StateMachine;
 
 namespace Player.States
 {
-    public abstract class PlayerState : State
+    public abstract class PlayerState : State<PlayerController>
     {
-        protected readonly PlayerController Player;
-
-        protected PlayerState(PlayerController player)
-        {
-            this.Player = player;
-        }
+        // Make an alias of Context called Player
+        protected PlayerController Player => Context;
+        
+        protected PlayerState(PlayerController context) : base(context) { }
     }
 }
