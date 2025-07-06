@@ -11,7 +11,7 @@ public class MouseLook : MonoBehaviour
 
     public void OnLook(InputAction.CallbackContext context)
     {
-        if (!context.performed)
+        if (!context.performed || !MouseManager.Instance.IsMouseLocked)
             return;
 
         Vector2 lookDelta = context.ReadValue<Vector2>() * mouseSensitivity;

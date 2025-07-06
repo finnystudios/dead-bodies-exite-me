@@ -5,15 +5,17 @@ namespace Managers
 {
     public class MouseManager : Singleton<MouseManager>
     {
+        
+        public bool IsMouseLocked {get; private set;}
+        
         private bool _mouseInWindow;
-        private bool _isMouseLocked;
         private bool _awaitingMouseEntry;
 
         public void LockMouse()
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            _isMouseLocked = true;
+            IsMouseLocked = true;
         }
 
         // ReSharper disable once MemberCanBePrivate.Global
@@ -21,12 +23,12 @@ namespace Managers
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            _isMouseLocked = false;
+            IsMouseLocked = false;
         }
 
         public void ToggleMouseLock()
         {
-            if (_isMouseLocked)
+            if (IsMouseLocked)
             {
                 UnlockMouse();
             }
@@ -36,9 +38,5 @@ namespace Managers
             }
         }
 
-        public bool IsMouseLocked()
-        {
-            return _isMouseLocked;
-        }
     }
 }
