@@ -5,25 +5,27 @@ using UnityEngine.InputSystem;
 
 namespace Player
 {
-    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(PlayerInput))]
     public class PlayerController : MonoBehaviour
     {
         [Header("Movement Settings")]
-        [SerializeField] private float gravity = 9.8f;
+        [SerializeField] private float gravity = -9.81f;
         [SerializeField] private float moveSpeed = 5f;
         [SerializeField] private float jumpForce = 5f;
 
         public PlayerInput InputManager { get; private set; }
         public readonly StateMachine<PlayerController> StateMachine = new();
-        
-        private Rigidbody _rb;
+        public bool IsGrounded => _controller.isGrounded;
+
+        private CharacterController _controller;
         private Vector2 _moveInput;
+        private Vector3 _velocity;
 
         // Variable initializations
         private void Awake()
         {
-            _rb = gameObject.GetComponent<Rigidbody>();
+            _controller = GetComponent<CharacterController>();
             InputManager = gameObject.GetComponent<PlayerInput>();
         }
 
@@ -34,40 +36,24 @@ namespace Player
         }
 
         // Update is called once per frame
+        // Don't kill me for putting physics in Update, Unity recommends it for CharacterController.move
         private void Update()
         {
+            // Movement logic
+            Vector3 move = transform.right * _moveInput.x + transform.forward * _moveInput.y;
+            _controller.Move(move * (moveSpeed * Time.deltaTime));
+            
+            // Gravity
+            _velocity.y += gravity * Time.deltaTime;
+            _controller.Move(_velocity * Time.deltaTime);
+            
             StateMachine.CurrentState?.Update();
-        }
-
-        // FixedUpdate is called at a fixed interval and is used for physics calculations
-        private void FixedUpdate()
-        {
-            if (StateMachine.CurrentState is MoveState)
-            {
-                HandleMovement();
-                ApplyGravity();
-            }
         }
         
         // Get movement direction from input callback
         public void OnMove(InputAction.CallbackContext context)
         {
             _moveInput = context.ReadValue<Vector2>();
-        }
-        
-        // Applies forces to move player
-        private void HandleMovement()
-        {
-            // Get movement direction
-            Vector3 move = transform.right * _moveInput.x + transform.forward * _moveInput.y;
-            // Apply forces
-            _rb.MovePosition(_rb.position + move * (moveSpeed * Time.fixedDeltaTime));
-        }
-
-        private void ApplyGravity()
-        {
-            // Apply gravity to the player
-            _rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
         }
     }
 }
