@@ -1,40 +1,37 @@
+using Core;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class MouseManager : Singleton<MouseManager>
+namespace Managers
 {
-    private bool isMouseLocked;
-    private bool mouseInWindow;
-    private bool awaitingMouseEntry;
-
-    public void LockMouse()
+    public class MouseManager : Singleton<MouseManager>
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        isMouseLocked = true;
-    }
+        private bool _awaitingMouseEntry;
 
-    public void UnlockMouse()
-    {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-        isMouseLocked = false;
-    }
+        private bool _mouseInWindow;
 
-    public void ToggleMouseLock()
-    {
-        if (isMouseLocked)
+        public bool IsMouseLocked { get; private set; }
+
+        public void LockMouse()
         {
-            UnlockMouse();
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            IsMouseLocked = true;
         }
-        else
-        {
-            LockMouse();
-        }
-    }
 
-    public bool IsMouseLocked()
-    {
-        return isMouseLocked;
+        // ReSharper disable once MemberCanBePrivate.Global
+        public void UnlockMouse()
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            IsMouseLocked = false;
+        }
+
+        public void ToggleMouseLock()
+        {
+            if (IsMouseLocked)
+                UnlockMouse();
+            else
+                LockMouse();
+        }
     }
 }

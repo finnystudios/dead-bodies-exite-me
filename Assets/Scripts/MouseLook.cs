@@ -1,19 +1,25 @@
+using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MouseLook : MonoBehaviour
 {
-	[SerializeField] private Transform cameraTransform;
-	[SerializeField] private float mouseSensitivity = 0.1f;
+    [SerializeField] private Transform cameraTransform;
+    [SerializeField] private float mouseSensitivity = 0.1f;
 
-	private float _pitch;
+    private float _pitch;
+
+    private void Start()
+    {
+        MouseManager.Instance.LockMouse();
+    }
 
     public void OnLook(InputAction.CallbackContext context)
     {
-        if (!context.performed)
+        if (!context.performed || !MouseManager.Instance.IsMouseLocked)
             return;
 
-        Vector2 lookDelta = context.ReadValue<Vector2>() * mouseSensitivity;
+        var lookDelta = context.ReadValue<Vector2>() * mouseSensitivity;
 
         // Apply pitch (camera)
         _pitch -= lookDelta.y;
@@ -22,11 +28,5 @@ public class MouseLook : MonoBehaviour
 
         // Apply yaw (player)
         transform.Rotate(Vector3.up, lookDelta.x);
-        Debug.Log(gameObject.transform.rotation.y);
-	}
-
-	private void Start()
-	{
-        MouseManager.Instance.LockMouse();
     }
 }

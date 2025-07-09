@@ -1,17 +1,10 @@
-using UnityEngine;
-
 // TODO: Implement Discord Rich Presence integration
-public class DiscordManager : Singleton<DiscordManager>
+
+using Core;
+
+namespace Managers
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class DiscordManager : Singleton<DiscordManager>
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

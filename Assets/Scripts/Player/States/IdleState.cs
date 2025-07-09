@@ -1,19 +1,19 @@
-using UnityEngine.InputSystem;
-
 namespace Player.States
 {
     public class IdleState : PlayerState
     {
-        public IdleState(PlayerController player) : base(player) { }
+        // Run superclass constructor
+        public IdleState(PlayerController player) : base(player)
+        {
+        }
 
         public override void Update()
         {
-            InputAction moveAction = Player.InputManager.actions["Move"];
+            var moveAction = Player.InputManager.actions["Move"];
 
-            if (moveAction.IsPressed())
-            {
-                Player.ChangeState(new MoveState(Player));
-            }
+            if (!Player.IsGrounded) Player.StateMachine.SetState(new FallState(Player));
+
+            if (moveAction.IsPressed()) Player.StateMachine.SetState(new MoveState(Player));
         }
     }
 }
