@@ -79,7 +79,7 @@ namespace Player
 
         public void OnJump(InputAction.CallbackContext context)
         {
-            if (IsGrounded) _velocity.y = jumpForce;
+            if (IsGrounded && context.performed) _velocity.y = jumpForce;
         }
 
         public void OnSprint(InputAction.CallbackContext context)
