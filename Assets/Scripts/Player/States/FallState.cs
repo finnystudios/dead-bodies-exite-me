@@ -1,8 +1,8 @@
 namespace Player.States
 {
-    public class FallingState : PlayerState
+    public class FallState : PlayerState
     {
-        public FallingState(PlayerController player) : base(player)
+        public FallState(PlayerController player) : base(player)
         {
         }
 

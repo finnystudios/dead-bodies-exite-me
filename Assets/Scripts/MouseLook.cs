@@ -28,6 +28,5 @@ public class MouseLook : MonoBehaviour
 
         // Apply yaw (player)
         transform.Rotate(Vector3.up, lookDelta.x);
-        Debug.Log(gameObject.transform.rotation.y);
     }
 }
