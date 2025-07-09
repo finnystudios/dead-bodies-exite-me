@@ -1,5 +1,5 @@
-using Player.States;
 using Core.StateMachine;
+using Player.States;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,18 +9,34 @@ namespace Player
     [RequireComponent(typeof(PlayerInput))]
     public class PlayerController : MonoBehaviour
     {
-        [Header("Movement Settings")]
-        [SerializeField] private float gravity = -9.81f;
-        [SerializeField] private float moveSpeed = 5f;
-        [SerializeField] private float jumpForce = 5f;
+        [Header("Movement Settings")] [SerializeField]
+        private float gravity = -9.81f;
 
-        public PlayerInput InputManager { get; private set; }
+        [SerializeField] private float jumpForce = 5f;
+        [SerializeField] private float moveSpeed = 5f;
+        [SerializeField] private float airborneMovementDampener = 0.5f;
         public readonly StateMachine<PlayerController> StateMachine = new();
-        public bool IsGrounded => _controller.isGrounded;
 
         private CharacterController _controller;
         private Vector2 _moveInput;
         private Vector3 _velocity;
+
+        public float MoveSpeed
+        {
+            // Ensure MoveSpeed isn't negative  
+            get => moveSpeed;
+            set => moveSpeed = value >= 0 ? value : moveSpeed;
+        }
+
+        public float AirborneMovementDampener
+        {
+            // Ensure dampener value isn't negative
+            get => airborneMovementDampener;
+            set => airborneMovementDampener = value >= 0 ? value : airborneMovementDampener;
+        }
+
+        public PlayerInput InputManager { get; private set; }
+        public bool IsGrounded => _controller.isGrounded;
 
         // Variable initializations
         private void Awake()
@@ -40,20 +56,27 @@ namespace Player
         private void Update()
         {
             // Movement logic
-            Vector3 move = transform.right * _moveInput.x + transform.forward * _moveInput.y;
+            var move = transform.right * _moveInput.x + transform.forward * _moveInput.y;
             _controller.Move(move * (moveSpeed * Time.deltaTime));
-            
+
             // Gravity
             _velocity.y += gravity * Time.deltaTime;
             _controller.Move(_velocity * Time.deltaTime);
-            
+
             StateMachine.CurrentState?.Update();
         }
-        
+
         // Get movement direction from input callback
         public void OnMove(InputAction.CallbackContext context)
         {
-            _moveInput = context.ReadValue<Vector2>();
+            _moveInput = StateMachine.CurrentState is not FallingState
+                ? context.ReadValue<Vector2>()
+                : context.ReadValue<Vector2>() * airborneMovementDampener;
+        }
+
+        public void OnJump(InputAction.CallbackContext context)
+        {
+            if (IsGrounded) _velocity.y = jumpForce;
         }
     }
 }

@@ -410,6 +410,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4148137820847477279, guid: 4953b3954fa5d52469cd5bb027e99118, type: 3}
+      propertyPath: gravity
+      value: -9.81
+      objectReference: {fileID: 0}
+    - target: {fileID: 4148137820847477279, guid: 4953b3954fa5d52469cd5bb027e99118, type: 3}
+      propertyPath: moveSpeed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4500742190229377217, guid: 4953b3954fa5d52469cd5bb027e99118, type: 3}
       propertyPath: m_ClearFlags
       value: 1
@@ -432,15 +440,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4703200525004288763, guid: 4953b3954fa5d52469cd5bb027e99118, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.42895
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4703200525004288763, guid: 4953b3954fa5d52469cd5bb027e99118, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.74
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4703200525004288763, guid: 4953b3954fa5d52469cd5bb027e99118, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4703200525004288763, guid: 4953b3954fa5d52469cd5bb027e99118, type: 3}
       propertyPath: m_LocalRotation.w
