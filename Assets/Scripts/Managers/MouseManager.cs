@@ -5,11 +5,11 @@ namespace Managers
 {
     public class MouseManager : Singleton<MouseManager>
     {
-        
-        public bool IsMouseLocked {get; private set;}
-        
-        private bool _mouseInWindow;
         private bool _awaitingMouseEntry;
+
+        private bool _mouseInWindow;
+
+        public bool IsMouseLocked { get; private set; }
 
         public void LockMouse()
         {
@@ -29,14 +29,9 @@ namespace Managers
         public void ToggleMouseLock()
         {
             if (IsMouseLocked)
-            {
                 UnlockMouse();
-            }
             else
-            {
                 LockMouse();
-            }
         }
-
     }
 }
