@@ -9,8 +9,11 @@ namespace Player
     {
         [SerializeField] private Camera playerCamera;
         [SerializeField] private float interactionRange = 3f;
-        
+
         private Interactable _currentInteractable;
+
+        private TextMeshProUGUI _interactionPrompt;
+
         private Interactable CurrentInteractable
         {
             get => _currentInteractable;
@@ -20,14 +23,12 @@ namespace Player
                 _interactionPrompt.text = value ? value.prompt : string.Empty;
             }
         }
-        
-        private TextMeshProUGUI _interactionPrompt;
-        
+
         private void Awake()
         {
             _interactionPrompt = GetComponentInChildren<HUDController>().InteractionPrompt;
         }
-        
+
         private void Update()
         {
             // ReSharper disable PossibleLossOfFraction
@@ -52,7 +53,7 @@ namespace Player
             if (interactable.IsInteractable)
             {
                 CurrentInteractable = interactable;
-                CurrentInteractable.EnableOutline();
+                CurrentInteractable?.EnableOutline();
             }
             else
             {
@@ -62,7 +63,14 @@ namespace Player
 
         public void OnInteract(InputAction.CallbackContext context)
         {
-            if (!context.performed) return;
+            if (!context.performed || !_currentInteractable) return;
+            Debug.Log(
+                $"<b>Player interacted with object</b> | " +
+                $"Name: {_currentInteractable.name} | " +
+                $"Type: {_currentInteractable.GetType()} | " +
+                $"ID: {_currentInteractable.GetInstanceID()}"
+            );
+
             CurrentInteractable?.Interact();
         }
     }

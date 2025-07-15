@@ -20,7 +20,7 @@ namespace Interactables
 
         public virtual void Interact()
         {
-            Debug.Log($"Player interacted with {name}");
+            gameObject.SetActive(false);
         }
 
         public void EnableOutline()

@@ -19,7 +19,7 @@ namespace Player
 
         [Header("Debug Settings")] [SerializeField]
         private bool printStates;
-        
+
         public readonly StateMachine<PlayerController> StateMachine = new();
 
         private CharacterController _controller;
